@@ -10,14 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_14_071353) do
+ActiveRecord::Schema.define(version: 2021_03_14_093802) do
 
-  create_table "tweets", force: :cascade do |t|
+  create_table "abstract_tweets", force: :cascade do |t|
     t.string "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
-    t.index ["user_id"], name: "index_tweets_on_user_id"
+    t.integer "status", default: 0
+    t.integer "tweet_id"
+    t.string "type", null: false
+    t.index ["tweet_id"], name: "index_abstract_tweets_on_tweet_id"
+    t.index ["user_id"], name: "index_abstract_tweets_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -27,5 +31,6 @@ ActiveRecord::Schema.define(version: 2021_03_14_071353) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "tweets", "users"
+  add_foreign_key "abstract_tweets", "abstract_tweets", column: "tweet_id"
+  add_foreign_key "abstract_tweets", "users"
 end

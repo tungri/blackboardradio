@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   root "tweets#index"
 
   # Tweets
+  get 'tweets/drafts', to: 'tweets#drafts'
+  post 'tweets/:id/publish', to: 'tweets#publish', as: 'publish_tweet'
   resources :tweets
 
   # Users & Login

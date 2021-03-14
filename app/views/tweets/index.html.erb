@@ -4,6 +4,7 @@
 <%end%>
 
 <%= link_to 'Add Tweet', '/tweets/new' %>
+<%= link_to 'Drafted Tweet', '/tweets/drafts' %>
 
 <h1>Tweets Feed</h1>
 <ul>
@@ -11,6 +12,7 @@
     <li>
       By <%= tweet.user.username %> on
       <%= tweet.created_at.strftime('%c') %>
+      <%= tweet.status %>
       <p><%= tweet.content %></p>
     </li>
   <% end %>
