@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_14_093802) do
+ActiveRecord::Schema.define(version: 2021_03_14_111206) do
 
   create_table "abstract_tweets", force: :cascade do |t|
     t.string "content"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2021_03_14_093802) do
     t.integer "status", default: 0
     t.integer "tweet_id"
     t.string "type", null: false
+    t.integer "comments_count", default: 0, null: false
     t.index ["tweet_id"], name: "index_abstract_tweets_on_tweet_id"
     t.index ["user_id"], name: "index_abstract_tweets_on_user_id"
   end
@@ -33,4 +34,16 @@ ActiveRecord::Schema.define(version: 2021_03_14_093802) do
 
   add_foreign_key "abstract_tweets", "abstract_tweets", column: "tweet_id"
   add_foreign_key "abstract_tweets", "users"
+  create_trigger("abstract_tweets_after_insert_row_tr", :generated => true, :compatibility => 1).
+      on("abstract_tweets").
+      after(:insert) do
+    "UPDATE abstract_tweets SET comments_count = comments_count + 1 WHERE id = NEW.tweet_id;"
+  end
+
+  create_trigger("abstract_tweets_after_delete_row_tr", :generated => true, :compatibility => 1).
+      on("abstract_tweets").
+      after(:delete) do
+    "UPDATE abstract_tweets SET comments_count = comments_count - 1 WHERE id = OLD.tweet_id;"
+  end
+
 end
