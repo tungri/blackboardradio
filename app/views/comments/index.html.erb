@@ -1,0 +1,14 @@
+<%= link_to 'Add Comment', new_tweet_comment_path(@tweet) %>
+
+<h1>Comments</h1>
+<ul>
+  <% @comments.each do |comment| %>
+    <li>
+      By <%= comment.user.username %> on
+      <%= comment.created_at.strftime('%c') %>
+      <p><%= comment.content %></p>
+      <%= button_to "Edit", edit_tweet_comment_path(comment.tweet, comment), method: :get%>
+      <%= button_to "Delete", tweet_comment_path(comment.tweet, comment), method: :delete%>
+    </li>
+  <% end %>
+</ul>
