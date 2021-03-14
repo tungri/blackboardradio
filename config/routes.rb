@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root "tweets#index"
 
   # Tweets
-  get 'tweets', to: 'tweets#index'
+  resources :tweets
 
   # Users & Login
   resources :users, only: [:new, :create]

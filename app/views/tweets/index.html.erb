@@ -3,11 +3,15 @@
     <%= button_to "Logout", '/logout', method: :delete%>
 <%end%>
 
-<h1>Tweets</h1>
+<%= link_to 'Add Tweet', '/tweets/new' %>
+
+<h1>Tweets Feed</h1>
 <ul>
   <% @tweets.each do |tweet| %>
     <li>
-      <%= tweet.content %>
+      By <%= tweet.user.username %> on
+      <%= tweet.created_at.strftime('%c') %>
+      <p><%= tweet.content %></p>
     </li>
   <% end %>
 </ul>
