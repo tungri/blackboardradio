@@ -1,0 +1,16 @@
+<h3>Tweet</h3>
+<p>
+  By <b><%= @tweet.user.username %></b> on
+  <%= @tweet.created_at.strftime('%c') %>
+  <p><%= @tweet.content %></p>
+  <p>
+    <% (@tweet.attachments or '').split( ',').each_with_index do |attachment, index| %>
+      <%= link_to "Attachment #{index + 1}", tweet_attachments_url(attachment) %>
+    <% end %>
+  </p>
+  <%= button_to 'Like', like_tweet_path(@tweet) %>
+  <p>
+    <%= "Likes (#{@tweet.likes_count})" %>
+    <%= "Comments (#{@tweet.comments_count})" %>
+  </p>
+</p>

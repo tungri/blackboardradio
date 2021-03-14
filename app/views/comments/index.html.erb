@@ -1,14 +1,16 @@
+<%= render "tweet" %>
 <%= link_to 'Add Comment', new_tweet_comment_path(@tweet) %>
-
-<h1>Comments</h1>
+<h4>Comments</h4>
 <ul>
   <% @comments.each do |comment| %>
     <li>
       By <%= comment.user.username %> on
       <%= comment.created_at.strftime('%c') %>
       <p><%= comment.content %></p>
-      <%= button_to "Edit", edit_tweet_comment_path(comment.tweet, comment), method: :get%>
-      <%= button_to "Delete", tweet_comment_path(comment.tweet, comment), method: :delete%>
+      <%= button_to 'Like', tweet_like_comment_path(comment.tweet, comment) %>
+      <p><%= "Likes (#{comment.likes_count})" %></p>
+      <%= button_to "Edit", edit_tweet_comment_path(comment.tweet, comment), method: :get%><br/>
+      <%= button_to "Delete", tweet_comment_path(comment.tweet, comment), method: :delete%><br/>
     </li>
   <% end %>
 </ul>

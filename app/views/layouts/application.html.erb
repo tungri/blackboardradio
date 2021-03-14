@@ -11,6 +11,16 @@
   </head>
 
   <body>
+    <% if logged_in? %>
+      <h1>Hello <%= current_user.username %> !</h1>
+      <%= button_to "Logout", '/logout', method: :delete%>
+      <p>
+        <%= link_to 'Home', root_path %><br/>
+        <%= link_to 'Add Tweet', new_tweet_url %><br/>
+        <%= link_to 'Drafted Tweet', tweets_drafts_url %><br/>
+      </p>
+    <%end%>
+
     <%= yield %>
   </body>
 </html>

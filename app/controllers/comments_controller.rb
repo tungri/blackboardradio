@@ -1,12 +1,8 @@
 class CommentsController < ApplicationController
   def index
     @tweet = Tweet.find(params[:tweet_id])
-    @comments = Comment.order(created_at: :desc).eager_load(:user).all
+    @comments = Comment.where(tweet: @tweet).order(created_at: :desc).eager_load(:user).all
   end
-
-  # def drafts
-  #   @draft_comments = Comment.where(status: :drafted, user: current_user).order(created_at: :desc).all
-  # end
 
   def new
     @comment = Comment.new
@@ -19,9 +15,6 @@ class CommentsController < ApplicationController
     @comment.save
     redirect_to tweet_comments_url
   end
-
-  # def show
-  # end
 
   def edit
     @comment = Comment.find(params[:id])
@@ -36,17 +29,16 @@ class CommentsController < ApplicationController
     end
   end
 
-  # def publish
-  #   @comment = Comment.find(params[:id])
-  #   @comment.status = :published
-  #   @comment.save()
-  #   redirect_to comments_path
-  # end
-
   def destroy
     @comment = Comment.find(params[:id])
     @comment.delete
     redirect_to tweet_comments_url
+  end
+
+  def like
+    @comment = Comment.find(params[:id])
+    AbstractLike.create(abstract_tweet: @comment, user: current_user)
+    redirect_back(fallback_location: root_path)
   end
 
   private

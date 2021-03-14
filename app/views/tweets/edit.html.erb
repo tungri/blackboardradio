@@ -2,5 +2,6 @@
 <%= form_for @tweet do |f|%>
   <%= f.label :Tweet%><br>
   <%= f.text_field :content%><br>
+  <%= f.file_field :attachments, multiple: true%><br>
   <%= f.submit %>
 <%end%>

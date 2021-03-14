@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_14_111206) do
+ActiveRecord::Schema.define(version: 2021_03_14_124947) do
+
+  create_table "abstract_likes", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "abstract_tweet_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["abstract_tweet_id"], name: "index_abstract_likes_on_abstract_tweet_id"
+    t.index ["user_id"], name: "index_abstract_likes_on_user_id"
+  end
 
   create_table "abstract_tweets", force: :cascade do |t|
     t.string "content"
@@ -21,6 +30,8 @@ ActiveRecord::Schema.define(version: 2021_03_14_111206) do
     t.integer "tweet_id"
     t.string "type", null: false
     t.integer "comments_count", default: 0, null: false
+    t.integer "likes_count", default: 0, null: false
+    t.text "attachments"
     t.index ["tweet_id"], name: "index_abstract_tweets_on_tweet_id"
     t.index ["user_id"], name: "index_abstract_tweets_on_user_id"
   end
@@ -32,6 +43,8 @@ ActiveRecord::Schema.define(version: 2021_03_14_111206) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "abstract_likes", "abstract_tweets"
+  add_foreign_key "abstract_likes", "users"
   add_foreign_key "abstract_tweets", "abstract_tweets", column: "tweet_id"
   add_foreign_key "abstract_tweets", "users"
   create_trigger("abstract_tweets_after_insert_row_tr", :generated => true, :compatibility => 1).
@@ -44,6 +57,18 @@ ActiveRecord::Schema.define(version: 2021_03_14_111206) do
       on("abstract_tweets").
       after(:delete) do
     "UPDATE abstract_tweets SET comments_count = comments_count - 1 WHERE id = OLD.tweet_id;"
+  end
+
+  create_trigger("abstract_likes_after_insert_row_tr", :generated => true, :compatibility => 1).
+      on("abstract_likes").
+      after(:insert) do
+    "UPDATE abstract_tweets SET likes_count = likes_count + 1 WHERE id = NEW.abstract_tweet_id;"
+  end
+
+  create_trigger("abstract_likes_after_delete_row_tr", :generated => true, :compatibility => 1).
+      on("abstract_likes").
+      after(:delete) do
+    "UPDATE abstract_tweets SET likes_count = likes_count - 1 WHERE id = OLD.abstract_tweet_id;"
   end
 
 end

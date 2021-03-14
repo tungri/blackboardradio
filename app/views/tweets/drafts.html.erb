@@ -1,9 +1,13 @@
-<%= link_to 'Tweets Feed', tweets_url %>
 <h1>Draft Tweets</h1>
 <ul>
   <% @draft_tweets.each do |tweet| %>
     <li>
       <p><%= tweet.content %></p>
+      <p>
+        <% (tweet.attachments or '').split( ',').each_with_index do |attachment, index| %>
+          <%= link_to "Attachment #{index + 1}", tweet_attachments_url(attachment) %>
+        <% end %>
+      </p>
       <%= button_to "Publish", publish_tweet_path(tweet)%>
       <%= button_to "Edit", edit_tweet_path(tweet), method: :get%>
       <%= button_to "Delete", tweet_path(tweet), method: :delete%>
