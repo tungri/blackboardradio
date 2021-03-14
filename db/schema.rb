@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_14_124947) do
+ActiveRecord::Schema.define(version: 2021_03_14_144635) do
 
   create_table "abstract_likes", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "abstract_tweet_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index "\"abstract_tweet\", \"user\"", name: "index_abstract_likes_on_abstract_tweet_and_user", unique: true
     t.index ["abstract_tweet_id"], name: "index_abstract_likes_on_abstract_tweet_id"
     t.index ["user_id"], name: "index_abstract_likes_on_user_id"
   end
@@ -32,6 +33,7 @@ ActiveRecord::Schema.define(version: 2021_03_14_124947) do
     t.integer "comments_count", default: 0, null: false
     t.integer "likes_count", default: 0, null: false
     t.text "attachments"
+    t.index "\"tweet\", \"user\"", name: "index_abstract_tweets_on_tweet_and_user", unique: true
     t.index ["tweet_id"], name: "index_abstract_tweets_on_tweet_id"
     t.index ["user_id"], name: "index_abstract_tweets_on_user_id"
   end

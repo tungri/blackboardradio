@@ -1,4 +1,6 @@
 class TweetsController < ApplicationController
+  before_action :check_if_editable, only: [:update, :publish, :destroy]
+
   def index
     @tweets = Tweet.where(status: :published).order(created_at: :desc).eager_load(:user).all
   end
@@ -34,8 +36,6 @@ class TweetsController < ApplicationController
   end
 
   def update
-    @tweet = Tweet.find(params[:id])
-    redirect_back(fallback_location: root_path) unless current_user == @tweet.user
     attachments_paths = upload_files(params[:tweet][:attachments])
     @tweet.attachments = attachments_paths.join(',')
     if @tweet.update(tweet_params)
@@ -46,8 +46,6 @@ class TweetsController < ApplicationController
   end
 
   def publish
-    @tweet = Tweet.find(params[:id])
-    redirect_back(fallback_location: root_path) unless current_user == @tweet.user
     @tweet.status = :published
     @tweet.save()
     redirect_to tweets_path
@@ -60,8 +58,6 @@ class TweetsController < ApplicationController
   end
 
   def destroy
-    @tweet = Tweet.find(params[:id])
-    redirect_back(fallback_location: root_path) unless current_user == @tweet.user
     @tweet.status = :deleted
     @tweet.save()
     redirect_to tweets_drafts_url
@@ -85,5 +81,10 @@ class TweetsController < ApplicationController
 
     def generate_random_filename
       return SecureRandom.urlsafe_base64
+    end
+
+    def check_if_editable
+      @tweet = Tweet.find(params[:id])
+      redirect_back(fallback_location: root_path) unless current_user == @tweet.user and @tweeet.status == :drafted
     end
 end
