@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2021_03_14_144635) do
     t.integer "abstract_tweet_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "\"abstract_tweet\", \"user\"", name: "index_abstract_likes_on_abstract_tweet_and_user", unique: true
+    t.index ["abstract_tweet_id", "user_id"], name: "index_abstract_likes_on_abstract_tweet_id_and_user_id", unique: true
     t.index ["abstract_tweet_id"], name: "index_abstract_likes_on_abstract_tweet_id"
     t.index ["user_id"], name: "index_abstract_likes_on_user_id"
   end
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2021_03_14_144635) do
     t.integer "comments_count", default: 0, null: false
     t.integer "likes_count", default: 0, null: false
     t.text "attachments"
-    t.index "\"tweet\", \"user\"", name: "index_abstract_tweets_on_tweet_and_user", unique: true
+    t.index ["tweet_id", "user_id"], name: "index_abstract_tweets_on_tweet_id_and_user_id", unique: true
     t.index ["tweet_id"], name: "index_abstract_tweets_on_tweet_id"
     t.index ["user_id"], name: "index_abstract_tweets_on_user_id"
   end
@@ -45,9 +45,9 @@ ActiveRecord::Schema.define(version: 2021_03_14_144635) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "abstract_likes", "abstract_tweets"
-  add_foreign_key "abstract_likes", "users"
-  add_foreign_key "abstract_tweets", "abstract_tweets", column: "tweet_id"
+  add_foreign_key "abstract_likes", "abstract_tweets", on_delete: :cascade
+  add_foreign_key "abstract_likes", "users", on_delete: :cascade
+  add_foreign_key "abstract_tweets", "abstract_tweets", column: "tweet_id", on_delete: :cascade
   add_foreign_key "abstract_tweets", "users"
   create_trigger("abstract_tweets_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("abstract_tweets").

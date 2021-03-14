@@ -11,7 +11,7 @@ class TweetsController < ApplicationController
 
   def attachments
     filename = "#{params[:filename]}.#{params[:format]}"
-    send_file(Rails.root.join("storcage", filename), filename: filename, type: "mime/type")
+    send_file(Rails.root.join("storage", filename), filename: filename, type: "mime/type")
   end
 
   def new
@@ -71,7 +71,7 @@ class TweetsController < ApplicationController
 
     def upload_files(files)
       attachments_paths = []
-      files.map do |file|
+      (files or []).map do |file|
         extension = file.original_filename.split('.')[-1]
         filename = "#{generate_random_filename}.#{extension}"
         File.binwrite(Rails.root.join("storage", filename), file.read)
@@ -85,6 +85,6 @@ class TweetsController < ApplicationController
 
     def check_if_editable
       @tweet = Tweet.find(params[:id])
-      redirect_back(fallback_location: root_path) unless current_user == @tweet.user and @tweeet.status == :drafted
+      redirect_back(fallback_location: root_path) unless current_user == @tweet.user and @tweet.status == 'drafted'
     end
 end

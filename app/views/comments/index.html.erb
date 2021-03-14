@@ -9,8 +9,10 @@
       <p><%= comment.content %></p>
       <%= button_to 'Like', tweet_like_comment_path(comment.tweet, comment) %>
       <p><%= "Likes (#{comment.likes_count})" %></p>
-      <%= button_to "Edit", edit_tweet_comment_path(comment.tweet, comment), method: :get%><br/>
-      <%= button_to "Delete", tweet_comment_path(comment.tweet, comment), method: :delete%><br/>
+      <% if @current_user == comment.user %>
+        <%= button_to "Edit", edit_tweet_comment_path(comment.tweet, comment), method: :get%><br/>
+        <%= button_to "Delete", tweet_comment_path(comment.tweet, comment), method: :delete%><br/>
+      <% end %>
     </li>
   <% end %>
 </ul>

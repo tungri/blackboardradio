@@ -1,10 +1,13 @@
 class CommentsController < ApplicationController
+  before_action :check_if_editable, only: [:update, :destroy]
+
   def index
     @tweet = Tweet.find(params[:tweet_id])
-    @comments = Comment.where(tweet: @tweet).order(created_at: :desc).eager_load(:user).all
+    @comments = Comment.where(tweet: @tweet).order(created_at: :desc).eager_load(:tweet, :user).all
   end
 
   def new
+    @tweet = Tweet.find(params[:tweet_id])
     @comment = Comment.new
   end
 
@@ -17,11 +20,11 @@ class CommentsController < ApplicationController
   end
 
   def edit
+    @tweet = Tweet.find(params[:tweet_id])
     @comment = Comment.find(params[:id])
   end
 
   def update
-    @comment = Comment.find(params[:id])
     if @comment.update(comment_params)
       redirect_to tweet_comments_url
     else
@@ -30,7 +33,6 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @comment = Comment.find(params[:id])
     @comment.delete
     redirect_to tweet_comments_url
   end
@@ -45,5 +47,10 @@ class CommentsController < ApplicationController
 
     def comment_params
       params.require(:comment).permit(:content)
+    end
+
+    def check_if_editable
+      @comment = Comment.find(params[:id])
+      redirect_back(fallback_location: root_path) unless current_user == @comment.user
     end
 end
