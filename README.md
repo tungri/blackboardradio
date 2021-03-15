@@ -2,9 +2,9 @@
 
 # Installation Instructions:
 - Clone the github
-```git clone git@github.com:tungri/blackboxradio.git```
+```git clone git@github.com:tungri/blackboardradio.git```
 - Change directory
-```cd blackboxradio```
+```cd blackboardradio```
 - Ensure Ruby Version is v3.0.0
 ```ruby -v```
 - Install Gems
