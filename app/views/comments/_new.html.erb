@@ -1,0 +1,6 @@
+<h4>New Comment</h4>
+<%= form_for Comment.new, url: tweet_comments_path, remote: true do |f|%>
+  <%= f.label :Comment%><br>
+  <%= f.text_field :content, class: 'comment'%><br>
+  <%= f.submit %>
+<%end%>

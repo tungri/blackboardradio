@@ -16,7 +16,6 @@ class CommentsController < ApplicationController
     @comment.user = current_user
     @comment.tweet_id = params[:tweet_id]
     @comment.save
-    redirect_to tweet_comments_url
   end
 
   def edit

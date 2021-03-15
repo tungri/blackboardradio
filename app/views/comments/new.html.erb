@@ -1,7 +1,0 @@
-<%= render "tweet" %>
-<h1>New Comment</h1>
-<%= form_for @comment, url: tweet_comments_path do |f|%>
-  <%= f.label :Comment%><br>
-  <%= f.text_field :content%><br>
-  <%= f.submit %>
-<%end%>
